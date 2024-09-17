@@ -1,10 +1,34 @@
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-<html><head>
-<title>429 Too Many Requests</title>
-</head><body>
-<h1>Too Many Requests</h1>
-<p>The user has sent too many requests
-in a given amount of time.</p>
-<hr>
-<address>Apache/2.4.41 (Ubuntu) Server at 2007.stateofthemap.org Port 443</address>
-</body></html>
+
+// Node.prototype.contains
+(function() {
+
+	function contains(node) {
+		if (!(0 in arguments)) {
+			throw new TypeError('1 argument is required');
+		}
+
+		do {
+			if (this === node) {
+				return true;
+			}
+		// eslint-disable-next-line no-cond-assign
+		} while (node = node && node.parentNode);
+
+		return false;
+	}
+
+	// IE
+	if ('HTMLElement' in self && 'contains' in HTMLElement.prototype) {
+		try {
+			delete HTMLElement.prototype.contains;
+		// eslint-disable-next-line no-empty
+		} catch (e) {}
+	}
+
+	if ('Node' in self) {
+		Node.prototype.contains = contains;
+	} else {
+		document.contains = Element.prototype.contains = contains;
+	}
+
+}());
